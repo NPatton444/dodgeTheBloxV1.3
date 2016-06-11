@@ -23,6 +23,10 @@ import java.util.Random;
 public class GameActivity extends Activity implements SensorEventListener {
 
     //region Vars
+
+    //CountdownTimer
+    CountDownTimer countDownTimer;
+
     int cycles, cycleCycles, cyclesLoop , scoreCycles, scoreAdder;
     public static int score;
 
@@ -105,7 +109,7 @@ public class GameActivity extends Activity implements SensorEventListener {
     }
 
     public void execute() {
-        new CountDownTimer(17, 1) {
+        countDownTimer = new CountDownTimer(17, 1) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
@@ -129,6 +133,7 @@ public class GameActivity extends Activity implements SensorEventListener {
     @Override
     public void onStop() {
         sensorManager.unregisterListener(this);
+        GameActivity.this.finish();
         super.onStop();
 
     }
@@ -237,6 +242,16 @@ public class GameActivity extends Activity implements SensorEventListener {
         //Move player
         if (p.x > -(playerWidth + 15) && p.x < width + 15) {
             p.Move(p);
+        }
+
+        //endregion
+
+        //region Collision
+
+        for(Blox b : bloxList){
+            if(b.Collision(p, b)){
+                onStop();
+            }
         }
 
         //endregion
